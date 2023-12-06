@@ -1,8 +1,6 @@
 pipeline {
     agent any
-    environment{
-    APP = 'server'
-    }
+
     stages {
         stage('拉取git代码') {
             steps {
@@ -11,7 +9,7 @@ pipeline {
         }
         stage('通过go build 构建项目') {
             steps {
-                sh '''cd /var/lib/jenkins/workspace/$APP
+                sh '''cd /var/lib/jenkins/workspace/server
                 go build
                 '''
             }
