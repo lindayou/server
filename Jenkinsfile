@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment{
+    APP =server
+    }
     stages {
         stage('拉取git代码') {
             steps {
@@ -8,7 +11,9 @@ pipeline {
         }
         stage('通过go build 构建项目') {
             steps {
-                echo 'mvn test'
+                sh '''cd /var/lib/jenkins/workspace/$APP
+                go build
+                '''
             }
         }
         stage('通过docker制作镜像') {
