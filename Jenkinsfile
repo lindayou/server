@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment{
-    APP =server
+    APP = 'server'
     }
     stages {
         stage('拉取git代码') {
