@@ -16,7 +16,9 @@ pipeline {
         }
         stage('通过docker制作镜像') {
             steps {
-                echo 'mvn deploy'
+                sh '''cd /var/lib/jenkins/workspace/server
+                docker build -t server
+                '''
             }
         }
          stage('推送到阿里云') {
