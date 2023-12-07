@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment{
-    version = 'v5'
+    version = '5'
     }
     stages {
         stage('拉取git代码') {
@@ -18,7 +18,7 @@ pipeline {
         stage('通过docker制作镜像') {
             steps {
                 sh '''cd /var/lib/jenkins/workspace/server
-                docker build -t registry.cn-hangzhou.aliyuncs.com/yeppy/zero:${version} .
+                docker build -t registry.cn-hangzhou.aliyuncs.com/yeppy/zero:v${version} .
 
                 '''
             }
@@ -27,13 +27,13 @@ pipeline {
          stage('推送到阿里云') {
              steps {
                  sh '''cd /var/lib/jenkins/workspace/server
-                    docker push registry.cn-hangzhou.aliyuncs.com/yeppy/zero:${version}
+                    docker push registry.cn-hangzhou.aliyuncs.com/yeppy/zero:v${version}
                          '''
                     }
                 }
          stage('通知K8s服务器更新镜像') {
                       steps {
-sshPublisher(publishers: [sshPublisherDesc(configName: 'k8s', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "/usr/local/chart/sh/publish-zero.sh ${version}", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
+sshPublisher(publishers: [sshPublisherDesc(configName: 'k8s', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "/usr/local/chart/sh/publish-zero.sh $v{version}", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
                              }
                          }
     }
