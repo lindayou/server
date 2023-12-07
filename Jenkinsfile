@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment{
-    version = 'v4'
+    version = 'v5'
     }
     stages {
         stage('拉取git代码') {
