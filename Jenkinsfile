@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment{
-    version = 'v3'
+    version = 'v4'
     }
     stages {
         stage('拉取git代码') {
@@ -23,6 +23,7 @@ pipeline {
                 '''
             }
         }
+
          stage('推送到阿里云') {
              steps {
                  sh '''cd /var/lib/jenkins/workspace/server
@@ -30,5 +31,10 @@ pipeline {
                          '''
                     }
                 }
+         stage('通知K8s服务器更新镜像') {
+                      steps {
+                 sshPublisher(publishers: [sshPublisherDesc(configName: 'k8s', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'pubsh-zero.sh $version', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                             }
+                         }
     }
 }
