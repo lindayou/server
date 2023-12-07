@@ -10,14 +10,13 @@ pipeline {
         stage('通过go build 构建项目') {
             steps {
                 sh '''cd /var/lib/jenkins/workspace/server
-                go build
                 '''
             }
         }
         stage('通过docker制作镜像') {
             steps {
                 sh '''cd /var/lib/jenkins/workspace/server
-                docker build -t server
+                docker build -t registry.cn-hangzhou.aliyuncs.com/yeppy/zero:v2 .
                 '''
             }
         }
