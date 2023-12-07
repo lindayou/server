@@ -17,12 +17,15 @@ pipeline {
             steps {
                 sh '''cd /var/lib/jenkins/workspace/server
                 docker build -t registry.cn-hangzhou.aliyuncs.com/yeppy/zero:v2 .
+
                 '''
             }
         }
          stage('推送到阿里云') {
-                    steps {
-                        echo 'mvn deploy'
+             steps {
+                 sh '''cd /var/lib/jenkins/workspace/server
+                    docker push registry.cn-hangzhou.aliyuncs.com/yeppy/zero:v2
+                         '''
                     }
                 }
     }
