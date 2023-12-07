@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    environment{
+    version = 'v3'
+    }
     stages {
         stage('拉取git代码') {
             steps {
@@ -16,7 +18,7 @@ pipeline {
         stage('通过docker制作镜像') {
             steps {
                 sh '''cd /var/lib/jenkins/workspace/server
-                docker build -t registry.cn-hangzhou.aliyuncs.com/yeppy/zero:v2 .
+                docker build -t registry.cn-hangzhou.aliyuncs.com/yeppy/zero:${version} .
 
                 '''
             }
@@ -24,7 +26,7 @@ pipeline {
          stage('推送到阿里云') {
              steps {
                  sh '''cd /var/lib/jenkins/workspace/server
-                    docker push registry.cn-hangzhou.aliyuncs.com/yeppy/zero:v2
+                    docker push registry.cn-hangzhou.aliyuncs.com/yeppy/zero:${version}
                          '''
                     }
                 }
